@@ -1,0 +1,37 @@
+# Object files
+*.o
+
+# Dependency
+*.d
+
+# Output
+*.htm
+*.axf
+*.sca
+*.crf
+*.iex
+*.lnp
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+#*.exe
+#*.out
+#*.app
+*.hex
+
+# Keil
+*.lst
+*.bak
+*.dep
+*.map
+*.sct
+*.tra
