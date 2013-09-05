@@ -16,8 +16,7 @@ void vLedBlinkRed(void *pvParameters);
 void vLedBlinkGreen(void *pvParameters);
 void vLedBlinkOrange(void *pvParameters);
 
-#define STACK_SIZE_MIN	130	/* usStackDepth	- the stack size DEFINED IN WORDS.*/
-
+#define STACK_SIZE_MIN	128	/* usStackDepth	- the stack size DEFINED IN WORDS.*/
 
 //******************************************************************************
 int main(void)
@@ -28,20 +27,28 @@ int main(void)
 	   To reconfigure the default setting of SystemInit() function, refer to
 	   system_stm32f4xx.c file
 	 */
-	const signed char vLedBlinkBlueStr[] = {"Led Blink Task Blue"};
-	const signed char vLedBlinkRedStr[] = {"Led Blink Task Red"};
-	const signed char vLedBlinkGreenStr[] = {"Led Blink Task Green"};
-	const signed char vLedBlinkOrangeStr[] = {"Led Blink Task Orange"};
+	
+	/*!< Most systems default to the wanted configuration, with the noticeable 
+		exception of the STM32 driver library. If you are using an STM32 with 
+		the STM32 driver library then ensure all the priority bits are assigned 
+		to be preempt priority bits by calling 
+		NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4 ); before the RTOS is started.
+	*/
+	NVIC_PriorityGroupConfig( NVIC_PriorityGroup_4 );
 	
 	STM_EVAL_LEDInit(LED_BLUE);
 	STM_EVAL_LEDInit(LED_GREEN);
 	STM_EVAL_LEDInit(LED_ORANGE);
 	STM_EVAL_LEDInit(LED_RED);
 	
-	xTaskCreate( vLedBlinkBlue, vLedBlinkBlueStr, STACK_SIZE_MIN, NULL, tskIDLE_PRIORITY, NULL );
-	xTaskCreate( vLedBlinkRed, vLedBlinkRedStr, STACK_SIZE_MIN, NULL, tskIDLE_PRIORITY, NULL );
-	xTaskCreate( vLedBlinkGreen, vLedBlinkGreenStr, STACK_SIZE_MIN, NULL, tskIDLE_PRIORITY, NULL );
-	xTaskCreate( vLedBlinkOrange, vLedBlinkOrangeStr, STACK_SIZE_MIN, NULL, tskIDLE_PRIORITY, NULL );
+	xTaskCreate( vLedBlinkBlue, (const signed char*)"Led Blink Task Blue", 
+		STACK_SIZE_MIN, NULL, tskIDLE_PRIORITY, NULL );
+	xTaskCreate( vLedBlinkRed, (const signed char*)"Led Blink Task Red", 
+		STACK_SIZE_MIN, NULL, tskIDLE_PRIORITY, NULL );
+	xTaskCreate( vLedBlinkGreen, (const signed char*)"Led Blink Task Green", 
+		STACK_SIZE_MIN, NULL, tskIDLE_PRIORITY, NULL );
+	xTaskCreate( vLedBlinkOrange, (const signed char*)"Led Blink Task Orange", 
+		STACK_SIZE_MIN, NULL, tskIDLE_PRIORITY, NULL );
 	
 	vTaskStartScheduler();
 }
@@ -57,13 +64,12 @@ void vLedBlinkBlue(void *pvParameters)
 	}
 }
 
-
 void vLedBlinkRed(void *pvParameters)
 {
 	for(;;)
 	{
 		STM_EVAL_LEDToggle(LED_RED);
-		vTaskDelay( 456 / portTICK_RATE_MS );
+		vTaskDelay( 750 / portTICK_RATE_MS );
 	}
 }
 
@@ -72,7 +78,7 @@ void vLedBlinkGreen(void *pvParameters)
 	for(;;)
 	{
 		STM_EVAL_LEDToggle(LED_GREEN);
-		vTaskDelay( 234 / portTICK_RATE_MS );
+		vTaskDelay( 250 / portTICK_RATE_MS );
 	}
 }
 
@@ -81,8 +87,7 @@ void vLedBlinkOrange(void *pvParameters)
 	for(;;)
 	{
 		STM_EVAL_LEDToggle(LED_ORANGE);
-		vTaskDelay( 890 / portTICK_RATE_MS );
+		vTaskDelay( 900 / portTICK_RATE_MS );
 	}
 }
 //******************************************************************************
-

@@ -79,10 +79,10 @@
  *----------------------------------------------------------*/
 
 /* Ensure stdint is only used by the compiler, and not the assembler. */
-//#ifdef __ICCARM__
-	#include <stdint.h>
-	extern uint32_t SystemCoreClock;
-//#endif
+#include <stdint.h>
+#include "stm32f4xx.h"
+
+extern uint32_t SystemCoreClock;
 
 #define configUSE_PREEMPTION			1
 #define configUSE_IDLE_HOOK				0
@@ -90,9 +90,9 @@
 #define configCPU_CLOCK_HZ				( SystemCoreClock )
 #define configTICK_RATE_HZ				( ( portTickType ) 1000 )
 #define configMAX_PRIORITIES			( ( unsigned portBASE_TYPE ) 5 )
-#define configMINIMAL_STACK_SIZE		( ( unsigned short ) 130 )
+#define configMINIMAL_STACK_SIZE		( ( unsigned short ) 128 )
 #define configTOTAL_HEAP_SIZE			( ( size_t ) ( 75 * 1024 ) )
-#define configMAX_TASK_NAME_LEN			( 10 )
+#define configMAX_TASK_NAME_LEN			( 16 )
 #define configUSE_TRACE_FACILITY		0
 #define configUSE_16_BIT_TICKS			0
 #define configIDLE_SHOULD_YIELD			1
@@ -104,6 +104,12 @@
 #define configUSE_APPLICATION_TASK_TAG	0
 #define configUSE_COUNTING_SEMAPHORES	1
 #define configGENERATE_RUN_TIME_STATS	0
+
+/* Low Power RTOS For ARM Cortex-M MCUs. */
+#define configOVERRIDE_DEFAULT_TICK_CONFIGURATION	0
+#define configUSE_TICKLESS_IDLE 					1
+#define configSYSTICK_CLOCK_HZ						( SystemCoreClock )
+#define xPortSysTickHandler							SysTick_Handler
 
 /* Co-routine definitions. */
 #define configUSE_CO_ROUTINES 		0
@@ -121,7 +127,7 @@ to exclude the API function. */
 #define INCLUDE_uxTaskPriorityGet		0
 #define INCLUDE_vTaskDelete				0
 #define INCLUDE_vTaskCleanUpResources	0
-#define INCLUDE_vTaskSuspend			0
+#define INCLUDE_vTaskSuspend			1
 #define INCLUDE_vTaskDelayUntil			0
 #define INCLUDE_vTaskDelay				1
 
@@ -153,7 +159,7 @@ See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
 /* Normal assert() semantics without relying on the provision of an assert.h
 header file. */
 #define configASSERT( x ) if( ( x ) == 0 ) { taskDISABLE_INTERRUPTS(); for( ;; ); }	
-	
+
 /* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS
 standard names. */
 #define vPortSVCHandler SVC_Handler
