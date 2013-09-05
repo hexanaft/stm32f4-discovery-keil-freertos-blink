@@ -455,6 +455,7 @@ void xPortSysTickHandler( void )
 	executes all interrupts must be unmasked.  There is therefore no need to
 	save and then restore the interrupt mask value as its value is already
 	known. */
+
 	( void ) portSET_INTERRUPT_MASK_FROM_ISR();
 	{
 		/* Increment the RTOS tick. */
@@ -475,7 +476,7 @@ void xPortSysTickHandler( void )
 	{
 	unsigned long ulReloadValue, ulCompleteTickPeriods, ulCompletedSysTickDecrements;
 	portTickType xModifiableIdleTime;
-
+		
 		/* Make sure the SysTick reload value does not overflow the counter. */
 		if( xExpectedIdleTime > xMaximumPossibleSuppressedTicks )
 		{
