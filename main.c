@@ -16,6 +16,9 @@ void vLedBlinkRed(void *pvParameters);
 void vLedBlinkGreen(void *pvParameters);
 void vLedBlinkOrange(void *pvParameters);
 
+#define STACK_SIZE_MIN	130	/* usStackDepth	- the stack size DEFINED IN WORDS.*/
+
+
 //******************************************************************************
 int main(void)
 {
@@ -25,15 +28,20 @@ int main(void)
 	   To reconfigure the default setting of SystemInit() function, refer to
 	   system_stm32f4xx.c file
 	 */
+	const signed char vLedBlinkBlueStr[] = {"Led Blink Task Blue"};
+	const signed char vLedBlinkRedStr[] = {"Led Blink Task Red"};
+	const signed char vLedBlinkGreenStr[] = {"Led Blink Task Green"};
+	const signed char vLedBlinkOrangeStr[] = {"Led Blink Task Orange"};
+	
 	STM_EVAL_LEDInit(LED_BLUE);
 	STM_EVAL_LEDInit(LED_GREEN);
 	STM_EVAL_LEDInit(LED_ORANGE);
 	STM_EVAL_LEDInit(LED_RED);
 	
-	xTaskCreate( vLedBlinkBlue, "Led Blink Task1", 130, NULL, 0, NULL );
-	xTaskCreate( vLedBlinkRed, "Led Blink Task2", 130, NULL, 0, NULL );
-	xTaskCreate( vLedBlinkGreen, "Led Blink Task3", 130, NULL, 0, NULL );
-	xTaskCreate( vLedBlinkOrange, "Led Blink Task4", 130, NULL, 0, NULL );
+	xTaskCreate( vLedBlinkBlue, vLedBlinkBlueStr, STACK_SIZE_MIN, NULL, tskIDLE_PRIORITY, NULL );
+	xTaskCreate( vLedBlinkRed, vLedBlinkRedStr, STACK_SIZE_MIN, NULL, tskIDLE_PRIORITY, NULL );
+	xTaskCreate( vLedBlinkGreen, vLedBlinkGreenStr, STACK_SIZE_MIN, NULL, tskIDLE_PRIORITY, NULL );
+	xTaskCreate( vLedBlinkOrange, vLedBlinkOrangeStr, STACK_SIZE_MIN, NULL, tskIDLE_PRIORITY, NULL );
 	
 	vTaskStartScheduler();
 }
@@ -77,3 +85,4 @@ void vLedBlinkOrange(void *pvParameters)
 	}
 }
 //******************************************************************************
+
